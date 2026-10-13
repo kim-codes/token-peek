@@ -1,0 +1,293 @@
+/* =========================================
+   BASE
+   ========================================= */
+
+:root {
+    --background: #fdfcfb;
+    --ink: #202124;
+    --muted: #666b73;
+    --lavender: #8d859f;
+    --border: #d8dce2;
+    --navy: #152233;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--ink);
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+textarea {
+    font: inherit;
+}
+
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.site-header {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-logo {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.site-nav a {
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding-bottom: 7px;
+    border-bottom: 1px solid transparent;
+}
+
+.site-nav a:hover {
+    color: var(--ink);
+}
+
+.site-nav a.active {
+    color: var(--ink);
+    border-bottom-color: var(--navy);
+}
+
+
+/* =========================================
+   INTRO
+   ========================================= */
+
+.decoder-intro {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 85px 24px 120px;
+}
+
+.decoder-intro h1 {
+    margin: 0;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+}
+
+.decoder-intro h1 span {
+    display: block;
+    color: #30435b;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+}
+
+.intro-description {
+    max-width: 540px;
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.decoder-area {
+    display: flex;
+    align-items: center;
+    gap: 65px;
+    margin-top: 90px;
+}
+
+
+/* =========================================
+   TOKEN INPUT
+   ========================================= */
+
+.decoder-area {
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    margin-top: 58px;
+}
+
+.token-input {
+    width: min(100%, 520px);
+}
+
+.token-input textarea {
+    display: block;
+    width: 100%;
+    min-height: 150px;
+    padding: 18px 20px;
+
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+}
+
+.token-input textarea:focus {
+    border-color: var(--lavender);
+    box-shadow: 0 0 0 2px rgb(141 133 159 / 12%);
+}
+
+.token-input textarea::placeholder {
+    color: #9aa3af;
+}
+
+.token-input button {
+    margin-top: 16px;
+    padding: 12px 23px;
+
+    background: var(--navy);
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.token-input button:hover {
+    background: #30435b;
+}
+
+.token-input button:focus-visible {
+    outline: 3px solid var(--lavender);
+    outline-offset: 3px;
+}
+
+
+/* =========================================
+   HANDWRITTEN NOTE
+   ========================================= */
+
+.input-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.token-input button {
+    margin-top: 0;
+}
+
+.privacy-note {
+    color: var(--muted);
+    font-family: "Inter", sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    transform: none;
+}
+
+/* =========================================
+   ACCESSIBILITY
+   ========================================= */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .site-header {
+        padding: 25px 6%;
+    }
+
+    .site-nav {
+        gap: 18px;
+    }
+
+    .site-nav a {
+        font-size: 0.8rem;
+    }
+
+    .decoder-intro {
+        padding: 65px 6% 90px;
+    }
+
+    .decoder-intro h1 {
+        font-size: clamp(2.7rem, 9vw, 4rem);
+    }
+
+    .intro-description {
+        font-size: 1rem;
+    }
+
+    .decoder-area {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .token-input {
+        width: 100%;
+    }
+
+    .privacy-note {
+        align-self: flex-end;
+        margin-right: 25px;
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .site-logo {
+        font-size: 1.2rem;
+    }
+
+    .site-nav {
+        gap: 12px;
+    }
+
+    .decoder-intro h1 {
+        font-size: 2.55rem;
+    }
+}

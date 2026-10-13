@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Token Peek · JWT Decoder</title>
+    <meta name="description" content="A tool for decoding and exploring JSON Web Tokens.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=Caveat:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <a href="index.html" class="site-logo">Token Peek</a>
+
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="index.html" class="active" aria-current="page">Decode</a>
+            <a href="https://kim.codes/labs/jwt.html" target="_blank" rel="noopener noreferrer">Learn</a>
+            <a href="https://github.com/kim-codes/token-peek" target="_blank" rel="noopener noreferrer">About</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="decoder-intro">
+
+            <h1>
+                Paste a token.
+                <span>Decode what's inside.</span>
+            </h1>
+
+            <p class="intro-description">
+                Paste a JWT to take a closer look.
+                Switch between raw JSON and plain-English explanations.
+            </p>
+
+            <div class="decoder-area">
+
+                <div class="token-input">
+                    <label for="jwt-input" class="visually-hidden">
+                        JSON Web Token
+                    </label>
+
+                    <textarea id="jwt-input" placeholder="Paste your JWT here..." spellcheck="false"
+                        autocomplete="off"></textarea>
+
+                    <div class="input-actions">
+                        <button type="button" id="decode-button">
+                            Decode token
+                        </button>
+
+                        <span class="privacy-note">
+                            <icon name="lock" /> Your token stays in your browser.
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
