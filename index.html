@@ -78,13 +78,14 @@
             <div class="results-inner">
 
                 <div class="results-heading">
-                    <h2>Here's a preview.</h2>
+                    <h2 id="results-title">Here's a preview.</h2>
                 </div>
 
                 <div class="encoded-token">
                     <span>Encoded token</span>
                     <div class="encoded-token-value">
-                        <code id="encoded-token-output">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
+                        <code
+                            id="encoded-token-output">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
                     </div>
                 </div>
 
@@ -245,7 +246,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon signature-icon">S</span>
-                                <strong class="signature-label"E>Signature</strong>
+                                <strong class="signature-label">Signature</strong>
                             </span>
 
                             <span class="accordion-description">
@@ -260,9 +261,10 @@
                             <div class="accordion-explanation">
                                 <span class="part-label signature-label">Signature</span>
                                 <p>
-                                    The signature can be used to check whether
-                                    a signed token has been altered.
-                                    Token Peek does not verify signatures.
+                                    <strong>Signature present, not verified.</strong>
+                                    Token Peek displays the encoded signature, but does not
+                                    check whether it matches the token's contents or was
+                                    created using a trusted key.
                                 </p>
                             </div>
 
@@ -292,8 +294,9 @@ cGxlLmNvbSIsInN1YiI6</code></pre>
                 </div>
 
                 <p class="verification-note">
-                    Example only. Token timestamps are not proof of validity.
-                    Signatures are not verified.
+                    TokenPeek decodes JWTs locally in your browser.<br>
+                    It does not verify signatures or confirm that a token is authentic.<br>
+                    Expiration information is based on the decoded claims.
                 </p>
 
             </div>

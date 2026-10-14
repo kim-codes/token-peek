@@ -109,8 +109,9 @@ function decodeToken(token) {
         };
 
     } catch (error) {
-        // return a readable error instead of crashing
-        return { error: "Unable to decode token: " + error.message };
+        return {
+            error: "Could not decode this token. Results below have not been updated."
+        };
     }
 }
 
@@ -129,18 +130,36 @@ decodeButton.addEventListener("click", function () {
     // find where we'll display errors
     const errorMessage = document.getElementById("token-error");
 
+    const resultsSection = document.getElementById("results");
+
     if (result.error) {
-        // display the error as plain text, not HTML
+        // display the error
         errorMessage.textContent = result.error;
         errorMessage.hidden = false;
+
         return;
     }
+
+    // show the decoded results
+    displayResults(result);
 
     // clear any previous error when decoding succeeds
     errorMessage.textContent = "";
     errorMessage.hidden = true;
 
     displayResults(result);
+
+    // clear the previous results title and replace it with a new one
+    document.getElementById("results-title").textContent = "Your decoded token";
+
+    // check whether the user prefers reduced motion
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // scroll to the decoded results
+    document.getElementById("results").scrollIntoView({
+        behavior: reducedMotion ? "instant" : "smooth",
+        block: "start"
+    });
 });
 
 // safely display the decoded information
@@ -341,13 +360,16 @@ function updateTokenLifetime(iat, exp) {
     // find the progress bar and its marker
     const progressBar = document.querySelector(".timeline-progress");
     const progressMarker = document.querySelector(".timeline-marker");
+    const lifetimeSection = document.querySelector(".lifetime");
 
-    // check that both timestamps are usable
+    // check timestamp & hide the timeline if we cannot calculate a meaningful lifetime
     if (!Number.isFinite(iat) || !Number.isFinite(exp) || exp <= iat) {
-        progressBar.style.width = "0%";
-        progressMarker.style.display = "none";
+        lifetimeSection.hidden = true;
         return;
     }
+
+    // show the timeline when both timestamps are usable
+    lifetimeSection.hidden = false;
 
     // get the current time in seconds
     const now = Date.now() / 1000;

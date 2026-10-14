@@ -679,6 +679,25 @@ textarea {
 }
 
 
+/* Token input errors */
+#token-error {
+    max-width: 680px;
+    margin: 20px auto 0;
+    padding: 12px 16px;
+    border-left: 3px solid #b45353;
+    border-radius: 4px;
+    background: #fdf3f3;
+    color: #8c3030;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-align: left;
+}
+
+#token-error[hidden] {
+    display: none;
+}
+
+
 /* =========================================
    RESPONSIVE
    ========================================= */
