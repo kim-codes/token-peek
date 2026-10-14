@@ -25,25 +25,56 @@ function validateInput(token) {
 // Decode Base64URL and parse JSON
 // it's own function to re-use for both header and paylod
 function decodeSegment(segment) {
+    // check for invalid Base64URL characters
+    if (!/^[A-Za-z0-9_-]+$/.test(segment)) {
+        throw new Error("Invalid Base64URL encoding.");
+    }
 
+    // convert to standard Base64
+    const base64 = segment.replace(/-/g, "+").replace(/_/g, "/");
+
+    // decode into text
+    const decodedText = atob(base64);
+
+    // parse as JSON
+    const parsed = JSON.parse(decodedText);
+
+    // verify it's a JSON object
+    if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw new Error("Decoded segment must contain a JSON object.");
+    }
+
+    return parsed;
 }
 
-// Put the checks and decoding together
 function decodeToken(token) {
+    // validate input 
+    const validationError = validateInput(token);
 
+    if (validationError) {
+        return { error: validationError };
+    }
+
+    try {
+        // split the token into its three parts
+        const parts = token.trim().split(".");
+
+        // decode the header and payload
+        const header = decodeSegment(parts[0]);
+        const payload = decodeSegment(parts[1]);
+
+        // return the decoded information
+        return {
+            header: header,
+            payload: payload
+        };
+
+    } catch (error) {
+        return { error: "Unable to decode token: " + error.message };
+    }
 }
 
 // Safely display the decoded information
 function displayResults(data) {
 
 }
-
-console.log(validateInput(""));
-console.log(validateInput("   "));
-console.log(validateInput("abc.def.ghi"));
-console.log(validateInput("a".repeat(10001)));
-console.log(validateInput("abc..ghi"));
-console.log(validateInput("abc.def.ghi.xyz"));
-
-console.log(decodeSegment("eyJhbGciOiJIUzI1NiJ9"));
-console.log(decodeSegment("%%%hello"));
