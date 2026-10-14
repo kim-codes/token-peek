@@ -79,13 +79,12 @@
 
                 <div class="results-heading">
                     <h2>Here's a preview.</h2>
-                    <p>Example decoded token</p>
                 </div>
 
                 <div class="encoded-token">
                     <span>Encoded token</span>
                     <div class="encoded-token-value">
-                        <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
+                        <code id="encoded-token-output">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
                     </div>
                 </div>
 
@@ -94,9 +93,7 @@
 
                     <div class="token-status">
                         <span>This token is</span>
-                        <h2>not expired.</h2>
-                        <p>21 hours 26 minutes remaining</p>
-                        <small>Aug 21, 2026 · 12:00 PM</small>
+                        <h2 id="expiration-status">not expired.</h2>
                     </div>
 
                     <div class="overview-details">
@@ -145,20 +142,20 @@
 
                                 <div>
                                     <strong>Issued</strong>
-                                    <span>Aug 20, 2026</span>
-                                    <span>12:00 PM</span>
+                                    <span id="issued-date">Aug 20, 2026</span>
+                                    <span id="issued-time">12:00 PM</span>
                                 </div>
 
                                 <div class="timeline-now">
                                     <strong>Now</strong>
-                                    <span>Aug 20, 2026</span>
-                                    <span>2:34 PM</span>
+                                    <span id="now-date">Aug 20, 2026</span>
+                                    <span id="now-time">2:34 PM</span>
                                 </div>
 
                                 <div class="timeline-end">
                                     <strong>Expires</strong>
-                                    <span>Aug 21, 2026</span>
-                                    <span>12:00 PM</span>
+                                    <span id="expires-date">Aug 21, 2026</span>
+                                    <span id="expires-time">12:00 PM</span>
                                 </div>
 
                             </div>
@@ -177,7 +174,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon header-icon">H</span>
-                                <strong>Header</strong>
+                                <strong class="header-label">Header</strong>
                             </span>
 
                             <span class="accordion-description">
@@ -210,7 +207,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon payload-icon">P</span>
-                                <strong>Payload</strong>
+                                <strong class="payload-label">Payload</strong>
                             </span>
 
                             <span class="accordion-description">
@@ -248,7 +245,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon signature-icon">S</span>
-                                <strong>Signature</strong>
+                                <strong class="signature-label"E>Signature</strong>
                             </span>
 
                             <span class="accordion-description">
