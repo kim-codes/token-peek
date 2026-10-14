@@ -104,7 +104,8 @@ function decodeToken(token) {
         // return the decoded information
         return {
             header: header,
-            payload: payload
+            payload: payload,
+            signature: parts[2]
         };
 
     } catch (error) {
@@ -118,3 +119,47 @@ function decodeToken(token) {
 function displayResults(data) {
 
 }
+
+// get the textarea and decode button from the HTML page
+const tokenInput = document.getElementById("jwt-input");
+const decodeButton = document.getElementById("decode-button");
+
+decodeButton.addEventListener("click", function () {
+
+    const token = tokenInput.value;
+
+    // pass input to the decoder
+    const result = decodeToken(token);
+
+    // find where we'll display errors
+    const errorMessage = document.getElementById("token-error");
+
+    if (result.error) {
+        // display the error as plain text, not HTML
+        errorMessage.textContent = result.error;
+        errorMessage.hidden = false;
+        return;
+    }
+
+    // clear any previous error when decoding succeeds
+    errorMessage.textContent = "";
+    errorMessage.hidden = true;
+
+    // find the header code block
+    const headerOutput = document.getElementById("header-json");
+
+    // format the decoded header as readable JSON
+    headerOutput.textContent = JSON.stringify(result.header, null, 2);
+
+    // find the payload code block
+    const payloadOutput = document.getElementById("payload-json");
+
+    // format the decoded payload as readable JSON
+    payloadOutput.textContent = JSON.stringify(result.payload, null, 2);
+
+    // find the signature code block
+    const signatureOutput = document.getElementById("signature-output");
+
+    // display the encoded signature (not verified)
+    signatureOutput.textContent = result.signature;
+});

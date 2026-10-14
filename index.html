@@ -55,6 +55,8 @@
                 </div>
             </div>
 
+            <p id="token-error" role="alert" hidden></p>
+
         </section>
 
         <!-- CURVED TRANSITION -->
@@ -195,7 +197,7 @@
                                 </p>
                             </div>
 
-                            <pre class="code-preview"><code>{
+                            <pre class="code-preview"><code id="header-json">{
   "alg": "HS256",
   "typ": "JWT"
 }</code></pre>
@@ -229,7 +231,7 @@
                                 </p>
                             </div>
 
-                            <pre class="code-preview"><code>{
+                            <pre class="code-preview"><code id="payload-json">{
   "sub": "1234567890",
   "name": "Kim",
   "iss": "example.com",
@@ -267,7 +269,7 @@
                                 </p>
                             </div>
 
-                            <pre class="code-preview"><code>K4Q9nJ7xP2fR6m1vZ3tY8pI
+                            <pre class="code-preview"><code id="signature-output">K4Q9nJ7xP2fR6m1vZ3tY8pI
 iwiaXNzIjoiYXU0aC5leGFt
 cGxlLmNvbSIsInN1YiI6</code></pre>
 
