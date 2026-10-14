@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Token Peek | JWT Decoder</title>
+    <meta name="description" content="A little tool for decoding, exploring, and making sense of JSON Web Tokens.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <a href="index.html" class="site-logo">
+            <span>Token</span> <strong>Peek</strong>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="https://kim.codes/labs/jwt.html" target="_blank" rel="noopener noreferrer">Learn</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- TOKEN INPUT -->
+        <section class="decoder-intro">
+
+            <h1>Paste a token.</h1>
+
+            <div class="token-input">
+                <label for="jwt-input" class="visually-hidden">
+                    JSON Web Token
+                </label>
+
+                <textarea id="jwt-input" placeholder="Input your JWT here..." spellcheck="false" autocomplete="off"
+                    autocapitalize="off"></textarea>
+
+                <div class="input-actions">
+                    <button type="button" id="decode-button">
+                        Decode token
+                    </button>
+
+                    <p class="privacy-note">
+                        Your token stays in your browser.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- CURVED TRANSITION -->
+        <div class="section-transition" aria-hidden="true">
+            <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+                <path d="M0 0 H400
+                         Q460 0 500 45
+                         Q520 65 580 65
+                         H860
+                         Q920 65 940 45
+                         Q980 0 1040 0
+                         H1440 V90 H0 Z" />
+            </svg>
+        </div>
+
+        <!-- SAMPLE DECODED RESULTS -->
+        <section class="results-section" id="results">
+
+            <div class="results-inner">
+
+                <div class="results-heading">
+                    <h2>Here's a preview.</h2>
+                    <p>Example decoded token</p>
+                </div>
+
+                <div class="encoded-token">
+                    <div class="encoded-token-value">
+                        <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW -->
+                <div class="token-overview">
+
+                    <div class="token-status">
+                        <span>This token is</span>
+                        <h2>not expired.</h2>
+                        <p>21 hours 26 minutes remaining</p>
+                        <small>Aug 21, 2026 · 12:00 PM</small>
+                    </div>
+
+                    <div class="overview-details">
+
+                        <!-- KEY CLAIMS -->
+                        <div class="key-claims">
+
+                            <div class="info-card">
+                                <span class="info-icon">iss</span>
+                                <div>
+                                    <small>Issued by</small>
+                                    <strong>example.com</strong>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <span class="info-icon">aud</span>
+                                <div>
+                                    <small>For</small>
+                                    <strong>my-api</strong>
+                                    <small>Audience</small>
+                                </div>
+                            </div>
+
+                            <div class="info-card">
+                                <span class="info-icon">sub</span>
+                                <div>
+                                    <small>Subject</small>
+                                    <strong>1234567890</strong>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- TOKEN LIFETIME -->
+                        <div class="lifetime">
+
+                            <h3>Token lifetime</h3>
+
+                            <div class="timeline-track" aria-hidden="true">
+                                <div class="timeline-progress"></div>
+                                <div class="timeline-marker"></div>
+                            </div>
+
+                            <div class="timeline-labels">
+
+                                <div>
+                                    <strong>Issued</strong>
+                                    <span>Aug 20, 2026</span>
+                                    <span>12:00 PM</span>
+                                </div>
+
+                                <div class="timeline-now">
+                                    <strong>Now</strong>
+                                    <span>Aug 20, 2026</span>
+                                    <span>2:34 PM</span>
+                                </div>
+
+                                <div class="timeline-end">
+                                    <strong>Expires</strong>
+                                    <span>Aug 21, 2026</span>
+                                    <span>12:00 PM</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- TOKEN DETAILS -->
+                <div class="token-details">
+
+                    <!-- HEADER -->
+                    <details class="token-accordion">
+                        <summary>
+                            <span class="accordion-name">
+                                <span class="accordion-icon header-icon">H</span>
+                                <strong>Header</strong>
+                            </span>
+
+                            <span class="accordion-description">
+                                Token type and signing algorithm
+                            </span>
+
+                            <span class="accordion-arrow" aria-hidden="true"></span>
+                        </summary>
+
+                        <div class="accordion-content">
+
+                            <div class="accordion-explanation">
+                                <span class="part-label header-label">Header</span>
+                                <p>
+                                    The header describes the token's type
+                                    and the algorithm specified for its signature.
+                                </p>
+                            </div>
+
+                            <pre class="code-preview"><code>{
+  "alg": "HS256",
+  "typ": "JWT"
+}</code></pre>
+
+                        </div>
+                    </details>
+
+                    <!-- PAYLOAD -->
+                    <details class="token-accordion">
+                        <summary>
+                            <span class="accordion-name">
+                                <span class="accordion-icon payload-icon">P</span>
+                                <strong>Payload</strong>
+                            </span>
+
+                            <span class="accordion-description">
+                                Claims about the subject and token timestamps
+                            </span>
+
+                            <span class="accordion-arrow" aria-hidden="true"></span>
+                        </summary>
+
+                        <div class="accordion-content">
+
+                            <div class="accordion-explanation">
+                                <span class="part-label payload-label">Payload</span>
+                                <p>
+                                    The payload contains claims about the subject,
+                                    including when the token was issued
+                                    and when it expires.
+                                </p>
+                            </div>
+
+                            <pre class="code-preview"><code>{
+  "sub": "1234567890",
+  "name": "Kim",
+  "iss": "example.com",
+  "aud": "my-api",
+  "iat": 1787241600,
+  "exp": 1787328000
+}</code></pre>
+
+                        </div>
+                    </details>
+
+                    <!-- SIGNATURE -->
+                    <details class="token-accordion">
+                        <summary>
+                            <span class="accordion-name">
+                                <span class="accordion-icon signature-icon">S</span>
+                                <strong>Signature</strong>
+                            </span>
+
+                            <span class="accordion-description">
+                                Signature data (not verified by this tool)
+                            </span>
+
+                            <span class="accordion-arrow" aria-hidden="true"></span>
+                        </summary>
+
+                        <div class="accordion-content">
+
+                            <div class="accordion-explanation">
+                                <span class="part-label signature-label">Signature</span>
+                                <p>
+                                    The signature can be used to check whether
+                                    a signed token has been altered.
+                                    Token Peek does not verify signatures.
+                                </p>
+                            </div>
+
+                            <pre class="code-preview"><code>K4Q9nJ7xP2fR6m1vZ3tY8pI
+iwiaXNzIjoiYXU0aC5leGFt
+cGxlLmNvbSIsInN1YiI6</code></pre>
+
+                        </div>
+                    </details>
+
+                </div>
+
+                <!-- COMMON CLAIMS -->
+                <div class="claims-reference">
+
+                    <h3>Common claims</h3>
+
+                    <div class="claims-list">
+                        <span><code>iss</code> Issuer</span>
+                        <span><code>sub</code> Subject</span>
+                        <span><code>aud</code> Audience</span>
+                        <span><code>exp</code> Expiration</span>
+                        <span><code>iat</code> Issued at</span>
+                        <span><code>nbf</code> Not before</span>
+                    </div>
+
+                </div>
+
+                <p class="verification-note">
+                    Example only. Token timestamps are not proof of validity.
+                    Signatures are not verified.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
