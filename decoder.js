@@ -115,11 +115,6 @@ function decodeToken(token) {
 }
 
 
-// safely display the decoded information
-function displayResults(data) {
-
-}
-
 // get the textarea and decode button from the HTML page
 const tokenInput = document.getElementById("jwt-input");
 const decodeButton = document.getElementById("decode-button");
@@ -145,6 +140,11 @@ decodeButton.addEventListener("click", function () {
     errorMessage.textContent = "";
     errorMessage.hidden = true;
 
+    displayResults(result);
+});
+
+// safely display the decoded information
+function displayResults(result) {
     // find the header code block
     const headerOutput = document.getElementById("header-json");
 
@@ -162,4 +162,30 @@ decodeButton.addEventListener("click", function () {
 
     // display the encoded signature (not verified)
     signatureOutput.textContent = result.signature;
-});
+
+    // find the issuer card
+    const issuerOutput = document.getElementById("issuer-value");
+
+    // display the issuer, or a fallback if it's missing
+    issuerOutput.textContent = result.payload.iss ?? "Not provided";
+
+    // find the audience card
+    const audienceOutput = document.getElementById("audience-value");
+
+    // display the audience, or a fallback if it's missing
+    // get the audience claim
+    const audience = result.payload.aud;
+
+    // check if the audience contains multiple values
+    if (Array.isArray(audience)) {
+        audienceOutput.textContent = audience.join(", ");
+    } else {
+        audienceOutput.textContent = audience ?? "Not provided";
+    }
+
+    // find the subject card
+    const subjectOutput = document.getElementById("subject-value");
+
+    // display the subject, or a fallback if it's missing
+    subjectOutput.textContent = result.payload.sub ?? "Not provided";
+}
