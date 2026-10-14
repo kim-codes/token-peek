@@ -9,9 +9,9 @@ a practical utility for decoding, interpreting, and troubleshooting JSON Web Tok
 ## what's inside
 
 - decode a JWT and inspect its header and payload
-- switch between raw JSON and plain-English explanations
-- see when a token was issued, becomes valid, and expires
-- dig a little deeper into individual claims 
+- inspect decoded claims with plain-English explanations
+- see when the token was issued and expires, with a visual timeline
+- dig a little deeper into jwt claims  
 
 ## a note on privacy & limitations
 
@@ -29,8 +29,4 @@ a few things worth knowing:
 
 Token Peek is built with vanilla HTML, CSS, and JavaScript. No build tools or dependencies required.
 
-opens direclty in the browser
-
-## status
-
-building and refining things 
+opens directly in the browser
