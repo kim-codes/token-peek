@@ -104,17 +104,286 @@ function decodeToken(token) {
         // return the decoded information
         return {
             header: header,
-            payload: payload
+            payload: payload,
+            signature: parts[2]
         };
 
     } catch (error) {
-        // return a readable error instead of crashing
-        return { error: "Unable to decode token: " + error.message };
+        return {
+            error: "Could not decode this token. Results below have not been updated."
+        };
     }
 }
 
 
-// safely display the decoded information
-function displayResults(data) {
+// get the textarea and decode button from the HTML page
+const tokenInput = document.getElementById("jwt-input");
+const decodeButton = document.getElementById("decode-button");
 
+decodeButton.addEventListener("click", function () {
+
+    const token = tokenInput.value;
+
+    // pass input to the decoder
+    const result = decodeToken(token);
+
+    // find where we'll display errors
+    const errorMessage = document.getElementById("token-error");
+
+    const resultsSection = document.getElementById("results");
+
+    if (result.error) {
+        // display the error
+        errorMessage.textContent = result.error;
+        errorMessage.hidden = false;
+
+        return;
+    }
+
+    // show the decoded results
+    displayResults(result);
+
+    // clear any previous error when decoding succeeds
+    errorMessage.textContent = "";
+    errorMessage.hidden = true;
+
+    displayResults(result);
+
+    // clear the previous results title and replace it with a new one
+    document.getElementById("results-title").textContent = "Your decoded token";
+
+    // check whether the user prefers reduced motion
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // scroll to the decoded results
+    document.getElementById("results").scrollIntoView({
+        behavior: reducedMotion ? "instant" : "smooth",
+        block: "start"
+    });
+});
+
+// safely display the decoded information
+function displayResults(result) {
+    // find the header code block
+    const headerOutput = document.getElementById("header-json");
+
+    // format the decoded header as readable JSON
+    headerOutput.textContent = JSON.stringify(result.header, null, 2);
+
+    // find the payload code block
+    const payloadOutput = document.getElementById("payload-json");
+
+    // format the decoded payload as readable JSON
+    payloadOutput.textContent = JSON.stringify(result.payload, null, 2);
+
+    // find the signature code block
+    const signatureOutput = document.getElementById("signature-output");
+
+    // display the encoded signature (not verified)
+    signatureOutput.textContent = result.signature;
+
+    // find the issuer card
+    const issuerOutput = document.getElementById("issuer-value");
+
+    // display the issuer, or a fallback if it's missing
+    issuerOutput.textContent = result.payload.iss ?? "Not provided";
+
+    // find the audience card
+    const audienceOutput = document.getElementById("audience-value");
+
+    // display the audience, or a fallback if it's missing
+    // get the audience claim
+    const audience = result.payload.aud;
+
+    // check if the audience contains multiple values
+    if (Array.isArray(audience)) {
+        audienceOutput.textContent = audience.join(", ");
+    } else {
+        audienceOutput.textContent = audience ?? "Not provided";
+    }
+
+    // find the subject card
+    const subjectOutput = document.getElementById("subject-value");
+
+    // display the subject, or a fallback if it's missing
+    subjectOutput.textContent = result.payload.sub ?? "Not provided";
+
+    // find the expiration status heading
+    const expirationStatus = document.getElementById("expiration-status");
+
+    // get the expiration claim from the payload
+    const exp = result.payload.exp;
+
+    // check whether the token has an expiration time
+    if (typeof exp !== "number" || !Number.isFinite(exp)) {
+        expirationStatus.textContent = "unknown.";
+    } else if (isTokenExpired(exp)) {
+        expirationStatus.textContent = "expired.";
+    } else {
+        expirationStatus.textContent = "not expired.";
+    }
+
+    // find the issued date and time elements
+    const issuedDate = document.getElementById("issued-date");
+    const issuedTime = document.getElementById("issued-time");
+
+    // get the issued-at claim
+    const iat = result.payload.iat;
+
+    // display the issued date and time if available
+    if (typeof iat === "number" && Number.isFinite(iat)) {
+        const date = getTokenDate(iat);
+
+        issuedDate.textContent = date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        });
+
+        issuedTime.textContent = date.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit"
+        });
+    } else {
+        issuedDate.textContent = "Not provided";
+        issuedTime.textContent = "";
+    }
+
+    // find the expiration date and time elements
+    const expiresDate = document.getElementById("expires-date");
+    const expiresTime = document.getElementById("expires-time");
+
+    // display the expiration date and time if available
+    if (typeof exp === "number" && Number.isFinite(exp)) {
+        const date = getTokenDate(exp);
+
+        expiresDate.textContent = date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        });
+
+        expiresTime.textContent = date.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit"
+        });
+    } else {
+        expiresDate.textContent = "Not provided";
+        expiresTime.textContent = "";
+    }
+
+    // find the current date and time elements
+    const nowDate = document.getElementById("now-date");
+    const nowTime = document.getElementById("now-time");
+
+    // get the current date and time
+    const now = new Date();
+
+    // display today's date
+    nowDate.textContent = now.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+    });
+
+    // display the current time
+    nowTime.textContent = now.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit"
+    });
+
+    // find the encoded token element
+    const encodedTokenOutput = document.getElementById("encoded-token-output");
+
+    // display the original token with color-coded segments
+    colorCodeToken(tokenInput.value, encodedTokenOutput);
+
+    // update the lifetime progress bar
+    updateTokenLifetime(iat, exp);
+}
+
+
+/****************************************
+ * HELPER FUNCTIONS
+ ****************************************/
+
+// check whether a token has expired
+function isTokenExpired(exp) {
+
+    // get the current time in seconds
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    // compare the expiration time against the current time
+    return currentTime >= exp;
+}
+
+// convert a JWT timestamp into a JavaScript Date
+function getTokenDate(timestamp) {
+    return new Date(timestamp * 1000);
+}
+
+// color code the three parts of the encoded JWT
+function colorCodeToken(token, outputElement) {
+
+    // split the original token into its three encoded parts
+    const [header, payload, signature] = token.trim().split(".");
+
+    // create a span for each part
+    const parts = [
+        { value: header, className: "token-header" },
+        { value: payload, className: "token-payload" },
+        { value: signature, className: "token-signature" }
+    ];
+
+    // clear the previous token
+    outputElement.replaceChildren();
+
+    // display each part with its own color
+    parts.forEach((part, index) => {
+        const span = document.createElement("span");
+
+        span.className = part.className;
+        span.textContent = part.value;
+
+        outputElement.appendChild(span);
+
+        // add the period between segments
+        if (index < parts.length - 1) {
+            outputElement.appendChild(document.createTextNode("."));
+        }
+    });
+}
+
+// update the token lifetime progress bar
+function updateTokenLifetime(iat, exp) {
+
+    // find the progress bar and its marker
+    const progressBar = document.querySelector(".timeline-progress");
+    const progressMarker = document.querySelector(".timeline-marker");
+    const lifetimeSection = document.querySelector(".lifetime");
+
+    // check timestamp & hide the timeline if we cannot calculate a meaningful lifetime
+    if (!Number.isFinite(iat) || !Number.isFinite(exp) || exp <= iat) {
+        lifetimeSection.hidden = true;
+        return;
+    }
+
+    // show the timeline when both timestamps are usable
+    lifetimeSection.hidden = false;
+
+    // get the current time in seconds
+    const now = Date.now() / 1000;
+
+    // calculate how much of the token's lifetime has passed
+    const elapsed = now - iat;
+    const total = exp - iat;
+    const percentage = (elapsed / total) * 100;
+
+    // keep the percentage between 0 and 100
+    const progress = Math.max(0, Math.min(100, percentage));
+
+    // update the progress bar and marker
+    progressBar.style.width = progress + "%";
+    progressMarker.style.left = progress + "%";
+    progressMarker.style.display = "";
 }

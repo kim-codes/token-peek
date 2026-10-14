@@ -55,6 +55,8 @@
                 </div>
             </div>
 
+            <p id="token-error" role="alert" hidden></p>
+
         </section>
 
         <!-- CURVED TRANSITION -->
@@ -76,14 +78,14 @@
             <div class="results-inner">
 
                 <div class="results-heading">
-                    <h2>Here's a preview.</h2>
-                    <p>Example decoded token</p>
+                    <h2 id="results-title">Here's a preview.</h2>
                 </div>
 
                 <div class="encoded-token">
                     <span>Encoded token</span>
                     <div class="encoded-token-value">
-                        <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
+                        <code
+                            id="encoded-token-output">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw...</code>
                     </div>
                 </div>
 
@@ -92,9 +94,7 @@
 
                     <div class="token-status">
                         <span>This token is</span>
-                        <h2>not expired.</h2>
-                        <p>21 hours 26 minutes remaining</p>
-                        <small>Aug 21, 2026 · 12:00 PM</small>
+                        <h2 id="expiration-status">not expired.</h2>
                     </div>
 
                     <div class="overview-details">
@@ -106,7 +106,7 @@
                                 <span class="info-icon">iss</span>
                                 <div>
                                     <small>Issued by</small>
-                                    <strong>example.com</strong>
+                                    <strong id="issuer-value">sample.com</strong>
                                 </div>
                             </div>
 
@@ -114,7 +114,7 @@
                                 <span class="info-icon">aud</span>
                                 <div>
                                     <small>For</small>
-                                    <strong>my-api</strong>
+                                    <strong id="audience-value">the-api</strong>
                                     <small>Audience</small>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                                 <span class="info-icon">sub</span>
                                 <div>
                                     <small>Subject</small>
-                                    <strong>1234567890</strong>
+                                    <strong id="subject-value">1234567890</strong>
                                 </div>
                             </div>
 
@@ -143,20 +143,20 @@
 
                                 <div>
                                     <strong>Issued</strong>
-                                    <span>Aug 20, 2026</span>
-                                    <span>12:00 PM</span>
+                                    <span id="issued-date">Aug 20, 2026</span>
+                                    <span id="issued-time">12:00 PM</span>
                                 </div>
 
                                 <div class="timeline-now">
                                     <strong>Now</strong>
-                                    <span>Aug 20, 2026</span>
-                                    <span>2:34 PM</span>
+                                    <span id="now-date">Aug 20, 2026</span>
+                                    <span id="now-time">2:34 PM</span>
                                 </div>
 
                                 <div class="timeline-end">
                                     <strong>Expires</strong>
-                                    <span>Aug 21, 2026</span>
-                                    <span>12:00 PM</span>
+                                    <span id="expires-date">Aug 21, 2026</span>
+                                    <span id="expires-time">12:00 PM</span>
                                 </div>
 
                             </div>
@@ -175,7 +175,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon header-icon">H</span>
-                                <strong>Header</strong>
+                                <strong class="header-label">Header</strong>
                             </span>
 
                             <span class="accordion-description">
@@ -195,7 +195,7 @@
                                 </p>
                             </div>
 
-                            <pre class="code-preview"><code>{
+                            <pre class="code-preview"><code id="header-json">{
   "alg": "HS256",
   "typ": "JWT"
 }</code></pre>
@@ -208,7 +208,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon payload-icon">P</span>
-                                <strong>Payload</strong>
+                                <strong class="payload-label">Payload</strong>
                             </span>
 
                             <span class="accordion-description">
@@ -229,7 +229,7 @@
                                 </p>
                             </div>
 
-                            <pre class="code-preview"><code>{
+                            <pre class="code-preview"><code id="payload-json">{
   "sub": "1234567890",
   "name": "Kim",
   "iss": "example.com",
@@ -246,7 +246,7 @@
                         <summary>
                             <span class="accordion-name">
                                 <span class="accordion-icon signature-icon">S</span>
-                                <strong>Signature</strong>
+                                <strong class="signature-label">Signature</strong>
                             </span>
 
                             <span class="accordion-description">
@@ -261,13 +261,14 @@
                             <div class="accordion-explanation">
                                 <span class="part-label signature-label">Signature</span>
                                 <p>
-                                    The signature can be used to check whether
-                                    a signed token has been altered.
-                                    Token Peek does not verify signatures.
+                                    <strong>Signature present, not verified.</strong>
+                                    Token Peek displays the encoded signature, but does not
+                                    check whether it matches the token's contents or was
+                                    created using a trusted key.
                                 </p>
                             </div>
 
-                            <pre class="code-preview"><code>K4Q9nJ7xP2fR6m1vZ3tY8pI
+                            <pre class="code-preview"><code id="signature-output">K4Q9nJ7xP2fR6m1vZ3tY8pI
 iwiaXNzIjoiYXU0aC5leGFt
 cGxlLmNvbSIsInN1YiI6</code></pre>
 
@@ -293,8 +294,9 @@ cGxlLmNvbSIsInN1YiI6</code></pre>
                 </div>
 
                 <p class="verification-note">
-                    Example only. Token timestamps are not proof of validity.
-                    Signatures are not verified.
+                    TokenPeek decodes JWTs locally in your browser.<br>
+                    It does not verify signatures or confirm that a token is authentic.<br>
+                    Expiration information is based on the decoded claims.
                 </p>
 
             </div>
